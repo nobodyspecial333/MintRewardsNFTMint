@@ -54,6 +54,13 @@ pub fn mint_nft(
 ) -> Result<()> {
     let state = &mut ctx.accounts.state;
     
+    require!(!state.pending_nfts.is_empty(), NFTError::EmptyBuffer);
+    
+    let nft_metadata = state.pending_nfts.pop_front()
+        .ok_or(NFTError::EmptyBuffer)?;
+    
+    require!(!nft_metadata.minted, NFTError::InvalidMetadata);
+    
     // Create mint account
     let cpi_context = CpiContext::new(
         ctx.accounts.token_program.to_account_info(),

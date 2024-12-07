@@ -9,8 +9,7 @@ use mpl_token_metadata::{
     state::{Creator, DataV2},
 };
 
-declare_id!("your_program_id_here");
-
+mod config;
 mod error;
 mod state;
 mod processor;
@@ -18,6 +17,8 @@ mod processor;
 use error::*;
 use state::*;
 use processor::*;
+
+declare_id!(config::PROGRAM_ID);
 
 #[program]
 pub mod nft_minter {
