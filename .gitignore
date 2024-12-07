@@ -24,6 +24,12 @@ test-ledger/
 app/.env
 app/.env.*
 
+# Keys and sensitive data
+*.key
+*.pem
+wallet.json
+arweave-keyfile.json
+
 # IDE
 .idea/
 .vscode/

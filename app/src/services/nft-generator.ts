@@ -109,7 +109,7 @@ export class NFTGeneratorService {
     }
 
     private async generateImage(prompt: string): Promise<Buffer> {
-	    #TODO!!!
+	    //TODO!!!
         const response = await this.createImage({
             prompt: prompt,
             n: 1,
