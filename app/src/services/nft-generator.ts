@@ -3,6 +3,8 @@ import { Connection, PublicKey, Keypair } from '@solana/web3.js';
 import { Program, AnchorProvider } from '@project-serum/anchor';
 import axios from 'axios';
 import { uploadToIPFS } from './ipfs-service';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export class NFTGeneratorService {
     private connection: Connection;
@@ -91,8 +93,18 @@ export class NFTGeneratorService {
     }
 
     private async fetchLatestNews() {
-        // Replace with your preferred news API
-        const response = await axios.get('https://api.example.com/news');
+        const NEWS_API_URL = process.env.NEWS_API_URL;
+        const NEWS_API_KEY = process.env.NEWS_API_KEY;
+
+        if (!NEWS_API_URL || !NEWS_API_KEY) {
+            throw new Error('Missing NEWS_API configuration in environment variables');
+        }
+
+        const response = await axios.get(NEWS_API_URL, {
+            headers: {
+                'Authorization': `Bearer ${NEWS_API_KEY}`
+            }
+        });
         return response.data.headlines;
     }
 
