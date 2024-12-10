@@ -109,16 +109,28 @@ export class NFTGeneratorService {
     }
 
     private async generateImage(prompt: string): Promise<Buffer> {
-	    //TODO!!!
-        const response = await this.createImage({
-            prompt: prompt,
-            n: 1,
-            size: '1024x1024',
-        });
+        const IMAGE_SERVICE_URL = process.env.IMAGE_SERVICE_URL;
+        const IMAGE_SERVICE_API_KEY = process.env.IMAGE_SERVICE_API_KEY;
 
-        const imageUrl = response.data.data[0].url;
-        const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-        return Buffer.from(imageResponse.data);
+        if (!IMAGE_SERVICE_URL || !IMAGE_SERVICE_API_KEY) {
+            throw new Error('Missing IMAGE_SERVICE configuration');
+        }
+
+        // We're creating a completely custom NFT art system never seen before. You thought we would just share it with everyone? 
+        // Moving that portion of code to a private service for now, we might share it later.
+        const response = await axios.post(
+            `${IMAGE_SERVICE_URL}/generate`,
+            { prompt },
+            {
+                headers: {
+                    'Authorization': `Bearer ${IMAGE_SERVICE_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                responseType: 'arraybuffer'
+            }
+        );
+
+        return Buffer.from(response.data);
     }
 }
 
